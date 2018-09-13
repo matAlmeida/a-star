@@ -117,7 +117,7 @@ class PathList:
             del self.pathList[pathIndex]
 
 
-def a_estrela(rootNode, destinationNode, pathList):
+def a_star(rootNode, destinationNode, pathList):
     pathList.append(Path(rootNode))
 
     while not pathList.isEmpty():
@@ -129,10 +129,10 @@ def a_estrela(rootNode, destinationNode, pathList):
         childrens = caminho.get_last_node().get_childrens()
         childrens = remove_cycles(caminho, childrens)
 
-        heuristica(caminho, childrens, pathList)
+        heuristic(caminho, childrens, pathList)
 
 
-def heuristica(path, childrens, pathList):
+def heuristic(path, childrens, pathList):
     for child in childrens:
         pathWithChild = path.concat(child)
         if pathList.dont_have_path_end_with_node(child):
