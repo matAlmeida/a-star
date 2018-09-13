@@ -52,7 +52,11 @@ class Path:
         self.path = [node]
 
     def concat(self, node):
-
+        """
+        Return a concatenated path without change the original
+            :param self:
+            :param node: Node to be concatenated
+        """
         concatenedPath = []
         concatenedPath.append(self.path)
         concatenedPath.append(node)
@@ -60,9 +64,17 @@ class Path:
         return concatenedPath
 
     def get_last_node(self):
+        """
+        Return the last node of this path
+            :param self: 
+        """
         return self.path[-1]
 
     def length(self):
+        """
+        Return the length of the path
+            :param self: 
+        """
         return len(self.path)
 
 
@@ -71,25 +83,43 @@ class PathList:
         self.pathList = [path]
 
     def append(self, newPath):
+        """
+        Append a new path to Path List
+            :param self: 
+            :param newPath: A Path
+        """
         self.pathList.append(newPath)
 
-    def isEmpty(self):
+    def is_empty(self):
+        """
+        Return true if the Path List is empty
+            :param self: 
+        """
         return len(self.pathList) == 0
 
     def get_smaller_path(self, pathList=None):
+        """
+        Return the smallest Path in the Path List
+            :param self: 
+            :param pathList=None: 
+        """
         if pathList == None:
             pathList = self.pathList
 
         smaller = (0, len(pathList[0]))
         for index, path in enumerate(pathList[1:]):
-            if len(path) < smaller[1]:
-                smaller = (index, len(path))
+            if path.length() < smaller[1]:
+                smaller = (index, path.length())
 
         smaller = (smaller[0], pathList[smaller[0]])
 
         return smaller
 
     def pop_smaller_path(self):
+        """
+        Remove the smallest path and return them
+            :param self: 
+        """
         smaller = self.get_smaller_path()
 
         del self.pathList[smaller[0]]
@@ -97,11 +127,21 @@ class PathList:
         return smaller[1]
 
     def dont_have_path_end_with_node(self, endNode):
+        """
+        Return true the Path List doesn't contain any Path that ends with a certain Node
+            :param self:
+            :param endNode: A Node that will be compared
+        """
         pathsWithNode = [path for path in self.pathList if path[-1] == endNode]
 
         return len(pathsWithNode) == 0
 
     def get_smaller_path_end_with_node(self, endNode):
+        """
+        Return the smallest Path that ends with a certain Node
+            :param self: 
+            :param endNode: A Node that will be compared
+        """
         pathsWithNode = [path for path in self.pathList if path[-1] == endNode]
 
         smaller = self.get_smaller_path(pathsWithNode)
@@ -109,6 +149,11 @@ class PathList:
         return smaller[1]
 
     def remove_paths_end_with_node(self, endNode):
+        """
+        Remove all Paths that ends with a certain Node
+            :param self: 
+            :param endNode: A Node that will be compared
+        """
         indexPathsWithNode = [index
                               for index, path in enumerate(self.pathList)
                               if path[-1] == endNode]
@@ -120,7 +165,7 @@ class PathList:
 def a_star(rootNode, destinationNode, pathList):
     pathList.append(Path(rootNode))
 
-    while not pathList.isEmpty():
+    while not pathList.is_empty():
         caminho = pathList.pop_smaller_path()
 
         if caminho.get_last_node() == destinationNode:
