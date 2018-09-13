@@ -117,30 +117,31 @@ class PathList:
             del self.pathList[pathIndex]
 
 
-def a_estrela(raiz, destino, lista_caminhos):
-    lista_caminhos.append(new Caminho(raiz))
+def a_estrela(rootNode, destinationNode, pathList):
+    pathList.append(Path(rootNode))
 
-    while not lista_caminhos.isEmpty():
-        caminho = lista_caminhos.pop_smaller()
+    while not pathList.isEmpty():
+        caminho = pathList.pop_smaller_path()
 
-        if caminho.get_last_node() == destino:
+        if caminho.get_last_node() == destinationNode:
             return caminho
 
-        filhos = caminho.get_last_node().get_childrens()
-        filhos = remove_cycles(caminho, filhos)
+        childrens = caminho.get_last_node().get_childrens()
+        childrens = remove_cycles(caminho, childrens)
 
-        heuristica(caminho, filhos, lista_caminhos)
+        heuristica(caminho, childrens, pathList)
 
 
-def heuristica(caminho, filhos, lista_caminhos):
-    for filho in filhos:
-        if lista_caminhos.dont_end_with(filho):
-            lista_caminhos.append(caminho.concat(filho))
+def heuristica(path, childrens, pathList):
+    for child in childrens:
+        pathWithChild = path.concat(child)
+        if pathList.dont_have_path_end_with_node(child):
+            pathList.append(pathWithChild)
         else:
-            cam = lista_caminhos.get_smaller_end_with(filho)
-            lista_caminhos.remove_all_end_with(filho)
+            smallerPath = pathList.get_smaller_path_end_with_node(child)
+            pathList.remove_paths_end_with_node(child)
 
-            if caminho.concat(filho).length() < cam.length():
-                lista_caminho.append(caminho_filho)
+            if pathWithChild.length() < smallerPath.length():
+                pathList.append(pathWithChild)
             else:
-                lista_caminhos.append(cam)
+                pathList.append(smallerPath)
