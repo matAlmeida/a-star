@@ -1,3 +1,43 @@
+# Pseudo-Codigo
+
+# a-estrela(raiz, destino, lista_caminhos)
+# 	lista_caminhos.insere(new caminho(raiz));
+
+# 	FAÇA
+# 		caminho = lista_caminho.obtém_remove_menor_caminho();
+
+# 		SE caminho.obtém_ultimo_no() == destino ENTÃO
+# 			retorna caminho;
+# 		FIM
+
+# 		filhos = caminho.obtém_último_no().get_filhos();
+# 		filhos = remove_ciclos(caminho, filhos);
+
+# 		heuristica(caminho, filhos, lista_caminhos);
+
+# 	ENQUANTO lista_caminhos != vazia FAÇA
+# FIM
+
+# heuristica(caminho, filhos, lista_caminhos)
+# 	PARA CADA filho em filhos FAÇA
+
+# 		SE lista_caminhos.não_tem_caminho_que_termina_em(filho) ENTÃO
+# 			lista_caminhos.insere(caminho + filho);//concatena
+# 		SENÃO
+# 			cam = lista_caminhos.obtém_menor_caminho_que_termina_em(filho);
+# 			lista_caminhos.remove_todos_caminhos_que_terminam_em(filho);
+
+# 			SE (caminho+filho).tamanho() < cam.tamanho() ENTÃO
+# 				lista_caminhos.insere(caminho+filho);
+# 			ELSE
+# 				lista_caminhos.insere(cam);
+# 			FIM
+# 		FIM
+
+# 	FIM
+# FIM
+
+
 class Node:
     def __init__(self, x, y):
         self.x = x
@@ -11,8 +51,19 @@ class Path:
     def __init__(self, node):
         self.path = [node]
 
+    def concat(self, node):
+
+        concatenedPath = []
+        concatenedPath.append(self.path)
+        concatenedPath.append(node)
+
+        return concatenedPath
+
     def get_last_node(self):
         return self.path[-1]
+
+    def length(self):
+        return len(self.path)
 
 
 class PathList:
@@ -84,14 +135,12 @@ def a_estrela(raiz, destino, lista_caminhos):
 def heuristica(caminho, filhos, lista_caminhos):
     for filho in filhos:
         if lista_caminhos.dont_end_with(filho):
-            caminho_filho = [].append(caminho).append(filho)
-            lista_caminhos.append(caminho_filho)
+            lista_caminhos.append(caminho.concat(filho))
         else:
             cam = lista_caminhos.get_smaller_end_with(filho)
             lista_caminhos.remove_all_end_with(filho)
 
-            caminho_filho = [].append(caminho).append(filho)
-            if caminho_filho.length() < cam.length():
+            if caminho.concat(filho).length() < cam.length():
                 lista_caminho.append(caminho_filho)
             else:
                 lista_caminhos.append(cam)
