@@ -1,8 +1,16 @@
 def is_empty(obj):
+    """
+    Return if the object is empty or not
+        :param obj: Any - A object
+    """
     return not (len(obj) > 0)
 
 
 def get_smaller_path(list_of_paths):
+    """
+    Return the smaller path of a list of paths (index, smaller_path)
+        :param list_of_paths: List - A list of Paths
+    """
     smaller = (0, len(list_of_paths[0]))
     for index, path in enumerate(list_of_paths[1:]):
         if len(path) < smaller[1]:
@@ -15,6 +23,10 @@ def get_smaller_path(list_of_paths):
 
 
 def pop_smaller_path(list_of_paths):
+    """
+    Remove the smaller path from a list of paths and return the Path
+        :param list_of_paths: List - A list of Paths
+    """
     smaller = get_smaller_path(list_of_paths)
 
     del list_of_paths[smaller[0]]
@@ -23,7 +35,10 @@ def pop_smaller_path(list_of_paths):
 
 
 def get_last_node(path):
-    # print(path)
+    """
+    Return the last Node of a Path
+        :param path: List - A Path
+    """
     return path[-1]
 
 
@@ -59,6 +74,11 @@ def get_childrens(node, buckets=(3, 4)):
 
 
 def remove_cycles(path, childrens):
+    """
+    Remove repeated nodes of a path
+        :param path: List - Path to be compared
+        :param childrens: List - Path to remove the cycles
+    """
     cycles = [node for node in path if node in childrens]
     for cycle in cycles:
         childrens.remove(cycle)
@@ -67,12 +87,22 @@ def remove_cycles(path, childrens):
 
 
 def dont_have_path_end_with_node(list_of_paths, child):
+    """
+    Check if a List of Paths has any Path that ends with a certain Node
+        :param list_of_paths: List - A list of Paths
+        :param child: Tuple[2] - A Node to be compared
+    """
     pathsWithNode = [path for path in list_of_paths if path[-1] == child]
 
     return len(pathsWithNode) == 0
 
 
 def get_smaller_path_end_with_node(list_of_paths, child):
+    """
+    Return the smaller path that ends with a certain Node
+        :param list_of_paths: List - A list of Paths
+        :param child: Tuple[2] - A Node to be compared
+    """
     pathsWithNode = [path for path in list_of_paths if path[-1] == child]
 
     smaller = get_smaller_path(pathsWithNode)
@@ -81,6 +111,11 @@ def get_smaller_path_end_with_node(list_of_paths, child):
 
 
 def remove_paths_end_with_node(list_of_paths, child):
+    """
+    Remove all paths from a list of Paths that end with a certain Node
+        :param list_of_paths: List - A list of Paths
+        :param child: Tuple[2] - A Node to be compared
+    """
     indexPathsWithNode = [
         index
         for index, path in enumerate(list_of_paths)
@@ -93,7 +128,13 @@ def remove_paths_end_with_node(list_of_paths, child):
     return list_of_paths
 
 
-def a_star(rootNode, destinationNode, pathList):
+def a_star(rootNode, destinationNode, pathList=[]):
+    """
+    Run a A-Star algorithm to solve Water Jug problem
+        :param rootNode: Tuple[2] - The initial state of the buckets
+        :param destinationNode: Tuple[2] - The desired final state of the buckets
+        :param pathList=[]: List - A list of lists. Will store the possible paths
+    """
     startPath = [rootNode]
     pathList.append(startPath)
 
@@ -110,6 +151,12 @@ def a_star(rootNode, destinationNode, pathList):
 
 
 def heuristic(path, childrens, pathList):
+    """
+    A heuristic algorithm especialist for the Water Jug problem
+        :param path: List - A path calculated as the smaller path from the list of paths
+        :param childrens: List - A new possible Path to reach the destination Node
+        :param pathList: List - A list of lists. Will store the possible paths
+    """
     for child in childrens:
         pathWithChild = [node for node in path]
         pathWithChild.append(child)
@@ -129,6 +176,5 @@ def heuristic(path, childrens, pathList):
 if __name__ == "__main__":
     root = (0, 0)
     destination = (2, 0)
-    pathList = []
 
-    print("\nSolution: ", a_star(root, destination, pathList))
+    print("\nSolution: ", a_star(root, destination))
