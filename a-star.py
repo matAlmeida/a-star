@@ -16,7 +16,6 @@ def get_smaller_path(list_of_paths):
         if len(path) < smaller[1]:
             smaller = (index, len(path))
 
-    print(list_of_paths[smaller[0]])
     smaller = (smaller[0], list_of_paths[smaller[0]])
 
     return smaller
@@ -141,6 +140,7 @@ def a_star(rootNode, destinationNode, pathList=[]):
     while not is_empty(pathList):
         caminho = pop_smaller_path(pathList)
 
+        print(caminho)
         if get_last_node(caminho) == destinationNode:
             return caminho
 
