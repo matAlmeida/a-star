@@ -27,28 +27,30 @@ def get_last_node(path):
     return path[-1]
 
 
-def get_childrens(node):
+def get_childrens(node, buckets=(3, 4)):
     childrens = []
+    bucketA = buckets[0]
+    bucketB = buckets[1]
 
-    if node[0] < 3:
-        childrens.append((3, node[1]))
-    if node[1] < 4:
-        childrens.append((node[0], 4))
+    if node[0] < bucketA:
+        childrens.append((bucketA, node[1]))
+    if node[1] < bucketB:
+        childrens.append((node[0], bucketB))
     if node[0] > 0:
         childrens.append((0, node[1]))
     if node[1] > 0:
         childrens.append((node[0], 0))
-    if (node[0] > 0) and (node[1] < 4):
+    if (node[0] > 0) and (node[1] < bucketB):
         a = node[0]
         b = node[1]
-        while (a > 0) and (b < 4):
+        while (a > 0) and (b < bucketB):
             a -= 1
             b += 1
         childrens.append((a, b))
-    if (node[1] > 0) and (node[0] < 3):
+    if (node[1] > 0) and (node[0] < bucketA):
         a = node[0]
         b = node[1]
-        while (a < 3) and (b > 0):
+        while (a < bucketA) and (b > 0):
             a += 1
             b -= 1
         childrens.append((a, b))
